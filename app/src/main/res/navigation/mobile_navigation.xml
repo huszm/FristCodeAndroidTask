@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation.xml"
+    app:startDestination="@id/postsListFragment">
+
+
+    <fragment
+        android:id="@+id/postsListFragment"
+        android:name="com.fristcode.task.ui.postsList.PostsListFragment"
+        android:label="Posts List"
+        tools:layout="@layout/fragment_posts_list">
+        <action
+            android:id="@+id/action_postsListFragment_to_postDetailsFragment"
+            app:destination="@id/postDetailsFragment" />
+        <action
+            android:id="@+id/action_postsListFragment_to_addPostFragment"
+            app:destination="@id/addPostFragment" />
+        <action
+            android:id="@+id/action_postsListFragment_to_editPostFragment"
+            app:destination="@id/editPostFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/postDetailsFragment"
+        android:name="com.fristcode.task.ui.postDetails.PostDetailsFragment"
+        android:label="Post Details"
+        tools:layout="@layout/fragment_post_details"/>
+    <fragment
+        android:id="@+id/addPostFragment"
+        android:name="com.fristcode.task.ui.addPost.AddPostFragment"
+        android:label="Add Post"/>
+    <fragment
+        android:id="@+id/editPostFragment"
+        android:name="com.fristcode.task.ui.editPost.EditPostFragment"
+        android:label="Edit Post"
+        tools:layout="@layout/fragment_edit_post" />
+</navigation>
