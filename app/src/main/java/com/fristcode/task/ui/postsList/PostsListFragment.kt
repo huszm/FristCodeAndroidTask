@@ -78,12 +78,7 @@ class PostsListFragment : Fragment() {
         super.onStop()
     }
 
-    override fun onPause() {
-        EventBus.getDefault().unregister(this)
-        super.onPause()
-    }
-
-    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    @Subscribe(sticky = false, threadMode = ThreadMode.MAIN)
     fun onDeletePost(event: EventDeletePost) {
         val builder = AlertDialog.Builder(requireContext())
             .setMessage("Are sure to delete this post?")

@@ -81,7 +81,7 @@ class MainActivity : AppCompatActivity() {
         super.onPause()
     }
 
-    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    @Subscribe(sticky = false, threadMode = ThreadMode.MAIN)
     fun onFragmentSelected(event: EventFragmentSelected) {
         navController.navigate(event.id)
     }

@@ -12,4 +12,5 @@ class PostModel:Parcelable{
     var id: Int? = null
     var name: String? = null
     var image: String? = null
+    var isFromApi: Boolean = true
 }

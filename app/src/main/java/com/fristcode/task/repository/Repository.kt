@@ -6,6 +6,7 @@ import com.fristcode.task.api.RetrofitClient
 import com.fristcode.task.database.PostDao
 import com.fristcode.task.database.PostDatabase
 import com.fristcode.task.model.ApiResponse
+import com.fristcode.task.model.ApiResponseArray
 import com.fristcode.task.model.PostModel
 import retrofit2.Response
 
@@ -27,11 +28,11 @@ class Repository(context: Context) {
         postDao.addListOfPosts(listPosts)
     }
 
-    suspend fun getPosts(limit:String , page:String): Response<ApiResponse> {
+    suspend fun getPosts(limit:String , page:String): Response<ApiResponseArray> {
         return RetrofitClient.api.getPosts(limit, page)
     }
 
-    suspend fun getPostDetails(id: String): Response<PostModel> {
+    suspend fun getPostDetails(id: String): Response<ApiResponse> {
         return RetrofitClient.api.getPostDetails(id)
     }
 

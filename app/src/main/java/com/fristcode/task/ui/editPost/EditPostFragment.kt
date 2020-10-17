@@ -62,6 +62,7 @@ class EditPostFragment : Fragment() {
         val post = PostModel().apply {
             this.id = Common.postModel?.id
             this.name = mTitle
+            this.isFromApi = false
             this.image = selectPhotoUri.toString()
         }
 

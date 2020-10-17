@@ -1,3 +1,3 @@
 package com.fristcode.task.model
 
-data class ApiResponse(var data:List<PostModel>)
+data class ApiResponse(var data:PostModel)

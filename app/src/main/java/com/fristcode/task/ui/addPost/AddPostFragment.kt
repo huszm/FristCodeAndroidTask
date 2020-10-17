@@ -56,6 +56,7 @@ class AddPostFragment : Fragment() {
         val post = PostModel().apply {
             this.name = mTitle
             this.image = selectPhotoUri.toString()
+            this.isFromApi = false
         }
 
         viewModel.addPost(post)

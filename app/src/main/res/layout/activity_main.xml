@@ -16,6 +16,7 @@
         android:layout_weight="1"
         android:text="text for test"
         android:padding="@dimen/size_10"
+        android:visibility="gone"
         android:textColor="@color/black"
         android:textSize="@dimen/txt_14" />
 
