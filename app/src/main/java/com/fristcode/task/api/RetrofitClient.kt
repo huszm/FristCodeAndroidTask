@@ -24,7 +24,7 @@ object RetrofitClient {
         }.build()
 
 
-    private val retrofit by lazy {
+    val retrofit: Retrofit by lazy {
         Retrofit.Builder()
             .baseUrl(Constants.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
@@ -32,9 +32,5 @@ object RetrofitClient {
             .build()
     }
 
-
-    val api: Api by lazy {
-        retrofit.create(Api::class.java)
-    }
 
 }

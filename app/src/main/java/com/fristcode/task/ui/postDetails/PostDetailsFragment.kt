@@ -8,41 +8,36 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
-import com.fristcode.task.R
 import com.fristcode.task.common.Common
-import kotlinx.android.synthetic.main.fragment_post_details.*
+import com.fristcode.task.databinding.FragmentPostDetailsBinding
 import org.koin.android.ext.android.inject
 
 class PostDetailsFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = PostDetailsFragment()
-    }
+    private var _binding: FragmentPostDetailsBinding? = null
+    private val binding get() = _binding!!
 
     private val viewModel by inject<PostDetailsViewModel>()
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_post_details, container, false)
-        return view
-    }
+    ): View {
+        _binding = FragmentPostDetailsBinding.inflate(inflater, container, false)
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
         observeData()
+
+        return binding.root
     }
 
     private fun observeData() {
         viewModel.getPostDetails(Common.postModel?.id.toString())
-        viewModel.postDetailsResponse.observe(viewLifecycleOwner, Observer {
-            tvDetailsTitle.text = it.name
+        viewModel.postDetailsResponse.observe(viewLifecycleOwner, {
+            binding.tvDetailsTitle.text = it.name
             if (!it.isFromApi)
-                Glide.with(requireContext()).load(Uri.parse(it.image)).into(imgPost)
+                Glide.with(requireContext()).load(Uri.parse(it.image)).into(binding.imgPost)
             else
-                Glide.with(requireContext()).load(it.image).into(imgPost)
+                Glide.with(requireContext()).load(it.image).into(binding.imgPost)
         })
 
     }

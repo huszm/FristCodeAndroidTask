@@ -13,14 +13,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 
-class PostsListViewModel(context: Context) : ViewModel() {
+class PostsListViewModel(
+    private val repository: Repository
+) : ViewModel() {
 
-    var readAllData: LiveData<List<PostModel>>
-    private val repository: Repository = Repository(context)
+    var readAllData: LiveData<List<PostModel>> = repository.readAllPost
 
-    init {
-        readAllData = repository.readAllPost
-    }
     private val postsListResponse: MutableLiveData<List<PostModel>> = MutableLiveData()
 
     fun getPosts(limit: String, page: String) {

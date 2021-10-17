@@ -10,13 +10,11 @@ import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.fristcode.task.R
 import com.fristcode.task.adapter.PostAdapter
+import com.fristcode.task.databinding.FragmentPostsListBinding
 import com.fristcode.task.eventBus.EventDeletePost
 import com.fristcode.task.eventBus.EventFragmentSelected
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import kotlinx.android.synthetic.main.fragment_posts_list.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -24,41 +22,39 @@ import org.koin.android.ext.android.inject
 
 class PostsListFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = PostsListFragment()
-    }
-
     private val viewModel by inject<PostsListViewModel>()
+    private var _binding: FragmentPostsListBinding? = null
+    private val binding get() = _binding!!
 
     var limit = 10
     var page = 1
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_posts_list, container, false)
+    ): View {
+        _binding = FragmentPostsListBinding.inflate(inflater, container, false)
 
-        return view
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        rvPosts.isNestedScrollingEnabled = false
+        binding.rvPosts.isNestedScrollingEnabled = false
 
         viewModel.getPosts(limit.toString(), page.toString())
         viewModel.readAllData.observe(viewLifecycleOwner, Observer {
 
             val layoutManger = LinearLayoutManager(requireContext())
-            rvPosts.layoutManager = layoutManger
+            binding.rvPosts.layoutManager = layoutManger
 
             val data = it
-            rvPosts.adapter = data?.let { it1 -> PostAdapter(it1, requireActivity()) }
+            binding.rvPosts.adapter = data?.let { it1 -> PostAdapter(it1, requireActivity()) }
         })
 
         pagination()
 
-        fabAddPost.setOnClickListener {
+        binding.fabAddPost.setOnClickListener {
             goToAddPostFragment()
         }
     }
@@ -85,7 +81,7 @@ class PostsListFragment : Fragment() {
             .setPositiveButton("Yes") { _: DialogInterface?, _: Int ->
                 viewModel.deletePost(event.postModel)
             }
-            .setNegativeButton("No") { dialog: DialogInterface?, which: Int ->
+            .setNegativeButton("No") { dialog: DialogInterface?, _: Int ->
                 dialog!!.dismiss()
             }
 
@@ -94,12 +90,10 @@ class PostsListFragment : Fragment() {
     }
 
     private fun pagination() {
-        nested.setOnScrollChangeListener { v:NestedScrollView, scrollX, scrollY, oldScrollX, oldScrollY ->
-            if (scrollY == v.getChildAt(0).measuredHeight - v.measuredHeight){
-
+        binding.nested.setOnScrollChangeListener { v: NestedScrollView, _, scrollY, _, _ ->
+            if (scrollY == v.getChildAt(0).measuredHeight - v.measuredHeight) {
                 page++
                 viewModel.getPosts(limit.toString(), page.toString())
-
             }
         }
     }

@@ -5,6 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.fristcode.task.model.PostModel
+import com.fristcode.task.utils.DomainIntegration
 
 @Database(entities = [PostModel::class], version = 1 , exportSchema = false)
 abstract class PostDatabase :RoomDatabase(){
@@ -15,7 +16,7 @@ abstract class PostDatabase :RoomDatabase(){
         @Volatile
         private var INSTANCE : PostDatabase?=null
 
-        fun getDatabase(context: Context):PostDatabase{
+        fun getDatabase():PostDatabase{
             val tempInstance = INSTANCE
             if (tempInstance != null){
                 return tempInstance
@@ -23,7 +24,7 @@ abstract class PostDatabase :RoomDatabase(){
 
             synchronized(this){
                 val instance = Room.databaseBuilder(
-                    context.applicationContext,
+                    DomainIntegration.getApplication(),
                     PostDatabase::class.java,
                     "posts_database"
                 ).build()

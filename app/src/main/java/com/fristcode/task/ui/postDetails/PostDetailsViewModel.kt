@@ -21,11 +21,11 @@ class PostDetailsViewModel(private val repository: Repository) : ViewModel() {
                 EventBus.getDefault().postSticky(EventProgressBarShowHide(true))
                 val response = repository.getPostDetails(id)
                 EventBus.getDefault().postSticky(EventProgressBarShowHide(false))
-                    if (response.isSuccessful) {
-                        postDetailsResponse.value = response.body()?.data
-                    } else {
-                        Log.d("#### error body", response.errorBody().toString())
-                    }
+                if (response.isSuccessful) {
+                    postDetailsResponse.value = response.body()?.data
+                } else {
+                    Log.d("#### error body", response.errorBody().toString())
+                }
             } else {
                 postDetailsResponse.value = Common.postModel
             }

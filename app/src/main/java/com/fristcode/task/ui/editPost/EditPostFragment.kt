@@ -7,51 +7,51 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.fristcode.task.R
 import com.fristcode.task.common.Common
+import com.fristcode.task.common.checkEmpty
+import com.fristcode.task.common.toast
+import com.fristcode.task.databinding.FragmentEditPostBinding
 import com.fristcode.task.model.PostModel
-import kotlinx.android.synthetic.main.fragment_edit_post.*
 import org.koin.android.ext.android.inject
 
 class EditPostFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = EditPostFragment()
-    }
+    private var _binding: FragmentEditPostBinding? = null
+    private val binding get() = _binding!!
+
+    private val viewModel by inject<EditPostViewModel>()
 
     private var selectPhotoUri: Uri? = null
     private val PICK: Int = 0
-    private val viewModel by inject<EditPostViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_edit_post, container, false)
+    ): View {
+        _binding = FragmentEditPostBinding.inflate(inflater, container, false)
+
+        setupUI()
+        return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    private fun setupUI() {
+        binding.etTitle.setText(Common.postModel?.name)
+        Glide.with(requireContext()).load(Uri.parse(Common.postModel?.image)).into(binding.imgPost)
 
 
-        etTitle.setText(Common.postModel?.name)
-        Glide.with(requireContext()).load(Uri.parse(Common.postModel?.image)).into(imgPost)
-
-
-        buEdit.setOnClickListener {
-            val title = etTitle.text.trim().toString()
-
-            if (title.isNullOrEmpty()) {
-                etTitle.error = "This failed is required"
+        binding.buEdit.setOnClickListener {
+            if (binding.etTitle.checkEmpty()) {
                 return@setOnClickListener
             }
+
+            val title = binding.etTitle.text.trim().toString()
             updateData(title)
         }
 
-        imgPost.setOnClickListener {
+        binding.imgPost.setOnClickListener {
             openGalleryAndGetImage()
 
         }
@@ -67,8 +67,7 @@ class EditPostFragment : Fragment() {
         }
 
         viewModel.editPost(post)
-        Toast.makeText(requireContext(), "Post has been edited successfully", Toast.LENGTH_LONG)
-            .show()
+        toast(getString(R.string.edited))
     }
 
     private fun openGalleryAndGetImage() {
@@ -84,7 +83,7 @@ class EditPostFragment : Fragment() {
         if (requestCode == 0 && resultCode == Activity.RESULT_OK && data != null) {
 
             selectPhotoUri = data.data
-            imgPost.setImageURI(selectPhotoUri)
+            binding.imgPost.setImageURI(selectPhotoUri)
 
         }
     }

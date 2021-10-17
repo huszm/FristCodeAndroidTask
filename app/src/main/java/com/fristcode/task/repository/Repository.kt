@@ -2,6 +2,7 @@ package com.fristcode.task.repository
 
 import android.content.Context
 import androidx.lifecycle.LiveData
+import com.fristcode.task.api.Api
 import com.fristcode.task.api.RetrofitClient
 import com.fristcode.task.database.PostDao
 import com.fristcode.task.database.PostDatabase
@@ -10,9 +11,11 @@ import com.fristcode.task.model.ApiResponseArray
 import com.fristcode.task.model.PostModel
 import retrofit2.Response
 
-class Repository(context: Context) {
+class Repository(
+    private val api: Api,
+    private val postDao: PostDao
+) {
 
-    private val postDao = PostDatabase.getDatabase(context).postDao()
     val readAllPost: LiveData<List<PostModel>> = postDao.readAllData()
 
     suspend fun editPost(postModel: PostModel){
@@ -29,11 +32,11 @@ class Repository(context: Context) {
     }
 
     suspend fun getPosts(limit:String , page:String): Response<ApiResponseArray> {
-        return RetrofitClient.api.getPosts(limit, page)
+        return api.getPosts(limit, page)
     }
 
     suspend fun getPostDetails(id: String): Response<ApiResponse> {
-        return RetrofitClient.api.getPostDetails(id)
+        return api.getPostDetails(id)
     }
 
 
